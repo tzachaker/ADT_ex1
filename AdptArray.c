@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "AdptArray.h"
 
-
 typedef struct AdptArray_ {
     COPY_FUNC copyFunc;
     DEL_FUNC deleteFunc;
@@ -11,7 +10,7 @@ typedef struct AdptArray_ {
     PElement* pElementAdptArray;
 } AdptArray;
 
-//*****************************************************************************
+
 PAdptArray CreateAdptArray(COPY_FUNC copy, DEL_FUNC delete, PRINT_FUNC print) {
     PAdptArray adptArr;
     adptArr = (PAdptArray) malloc(sizeof(AdptArray));
@@ -28,7 +27,9 @@ PAdptArray CreateAdptArray(COPY_FUNC copy, DEL_FUNC delete, PRINT_FUNC print) {
     }
 }
 
-//*****************************************************************************
+//The DeleteAdptArray function deletes the AdptArray and its elements.
+//It calls the deleteFunc function on each element and sets it to NULL.
+//Then it frees the array memory and the object memory.
 void DeleteAdptArray(PAdptArray adptArr) {
     if (adptArr == NULL) {
         return;
@@ -44,8 +45,10 @@ void DeleteAdptArray(PAdptArray adptArr) {
     free(adptArr);
 }
 
-//*****************************************************************************
-
+//The SetAdptArrayAt function sets the element at the given index to a new value. 
+//If the index is out of bounds, it resizes the array to accommodate the new index.
+// If the element at the index is not NULL, it is first deleted using the deleteFunc function.
+// Then the new element is copied at the index.
 Result SetAdptArrayAt(PAdptArray adptArr, int index, PElement pElement) {
     if (adptArr == NULL || index < 0) {
         return FAIL;
@@ -73,8 +76,9 @@ Result SetAdptArrayAt(PAdptArray adptArr, int index, PElement pElement) {
     return SUCCESS;
 }
 
-//*****************************************************************************
-
+//The GetAdptArrayAt function return the element at the given index. 
+//If the index is out of bounds or the element is NULL, it returns NULL.
+//Otherwise, it copies the element using the copyFunc function and returns the copy.
 PElement GetAdptArrayAt(PAdptArray adptArr, int index) {
     if (adptArr == NULL || index < 0 || index >= GetAdptArraySize(adptArr)) {
         return NULL;
@@ -86,7 +90,7 @@ PElement GetAdptArrayAt(PAdptArray adptArr, int index) {
     return adptArr->copyFunc(element);
 }
 
-//*****************************************************************************
+//The GetAdptArraySize function returns the size of the AdptArray. If the object is NULL, it returns -1.
 int GetAdptArraySize(PAdptArray adptArr) {
     if (adptArr == NULL){
         return -1;
@@ -94,7 +98,7 @@ int GetAdptArraySize(PAdptArray adptArr) {
     return adptArr->sizeAdptArray;
 }
 
-//*****************************************************************************
+//The PrintDB function prints all the "non-NULL" elements of the AdptArray by calling the printFunc function on each "non-NULL" element.
 void PrintDB(PAdptArray adptArr) {
     if (adptArr == NULL){ 
         return;
@@ -106,5 +110,3 @@ void PrintDB(PAdptArray adptArr) {
         }
     }
 }
-
-//*****************************************************************************
